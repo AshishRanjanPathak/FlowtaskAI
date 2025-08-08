@@ -96,12 +96,16 @@ export default function DashboardPage() {
         audioRef.current.play();
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to parse and add task:', error);
+      let description = 'Could not understand or save the task. Please try again.';
+      if (error.message && error.message.includes('429')) {
+        description = 'You have exceeded the daily limit for AI task creation. Please try again tomorrow.';
+      }
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: 'Could not understand or save the task. Please try again.',
+        title: 'Error Adding Task',
+        description,
       });
     } finally {
       setIsParsing(false);

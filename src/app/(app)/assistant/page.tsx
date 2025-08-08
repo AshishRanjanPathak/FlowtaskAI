@@ -72,7 +72,7 @@ export default function AssistantPage() {
       <Card className="flex-grow flex flex-col">
         <CardHeader>
           <CardTitle className="font-headline">AI Assistant</CardTitle>
-          <CardDescription>Chat with the AI to manage your tasks. Try "What are my urgent tasks?" or "Add 'buy milk' to my list."</CardDescription>
+          <CardDescription>Chat with your friendly AI assistant.</CardDescription>
         </CardHeader>
         <CardContent className="flex-grow flex flex-col gap-4">
           <ScrollArea className="flex-grow border rounded-lg p-4" ref={scrollAreaRef}>

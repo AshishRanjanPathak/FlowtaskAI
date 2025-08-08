@@ -26,9 +26,9 @@ export interface FirestoreTask extends Omit<Task, 'dueDate' | 'completed_at' | '
 }
 
 const mapFirestoreDocToTask = (doc: any): Task => {
-    const data = doc.data() as FirestoreTask;
+    const data = doc.data();
     return {
-        ...data,
+        ...(data as Omit<Task, 'id'>),
         id: doc.id,
         dueDate: data.dueDate?.toDate().toISOString(),
         completed_at: data.completed_at?.toDate().toISOString(),
@@ -36,7 +36,7 @@ const mapFirestoreDocToTask = (doc: any): Task => {
     };
 };
 
-export const addTaskForUser = async (uid: string, taskData: Omit<Task, 'id' | 'status'>): Promise<Task> => {
+export const addTaskForUser = async (uid: string, taskData: Omit<Task, 'id' | 'status' | 'createdAt'>): Promise<Task> => {
   const tasksCollection = collection(db, 'tasks');
   
   let dueDate: Date | undefined = undefined;
@@ -49,7 +49,7 @@ export const addTaskForUser = async (uid: string, taskData: Omit<Task, 'id' | 's
     }
   }
   
-  const docData = {
+  const docData: { [key: string]: any } = {
     ...taskData,
     uid,
     status: 'pending',
@@ -61,7 +61,8 @@ export const addTaskForUser = async (uid: string, taskData: Omit<Task, 'id' | 's
   Object.keys(docData).forEach(key => docData[key as keyof typeof docData] === undefined && delete docData[key as keyof typeof docData]);
 
   const docRef = await addDoc(tasksCollection, docData);
-  return { ...taskData, id: docRef.id, status: 'pending', createdAt: new Date().toISOString() };
+  const newTaskDoc = await getDoc(docRef);
+  return mapFirestoreDocToTask(newTaskDoc);
 };
 
 export const getTasksForUser = async (uid: string): Promise<Task[]> => {
