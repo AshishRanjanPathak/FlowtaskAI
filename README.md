@@ -32,3 +32,6 @@ FlowTaskAI helps you **capture tasks instantly** with **voice or text**, then us
 ```bash
 git clone https://github.com/AshishRanjanPathak/FlowtaskAI.git
 cd FlowtaskAI
+
+**Live Link = https://flowtaskai.netlify.app/**
+
